@@ -1,0 +1,48 @@
+name: Build & Deploy Flutter Web
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:   # allows manual trigger from GitHub UI
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+          cache: true
+
+      - name: Enable Flutter web
+        run: flutter config --enable-web
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Flutter web
+        run: |
+          flutter build web --release \
+            --web-renderer canvaskit \
+            --base-href /New-Design_06072025/ \
+            --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
+            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }} \
+            --dart-define=OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
+            --dart-define=STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }} \
+            --dart-define=APP_SECRET_KEY=${{ secrets.APP_SECRET_KEY }} \
+            --dart-define=ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }} \
+            --dart-define=PASSWORD_RESET_URL=https://collabfuture.com/reset-password
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          force_orphan: true
+          commit_message: "Deploy web build ${{ github.sha }}"
