@@ -543,6 +543,11 @@ class SecurityService {
     }
   }
 
+  // Public wrapper so screens can log events without needing direct DB access
+  Future<void> recordActivity({String eventType = 'activity', String description = 'User activity'}) async {
+    await _logSecurityEvent(eventType, description);
+  }
+
   // Security Audit
   Future<void> _logSecurityEvent(String eventType, String description) async {
     if (_currentUserId == null) return;
