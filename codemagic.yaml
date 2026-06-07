@@ -1,5 +1,76 @@
 workflows:
 
+  # ── Web Preview (desktop browser — no signing needed) ────────
+  web-preview:
+    name: Web Preview (Netlify)
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+
+    environment:
+      flutter: stable
+      vars:
+        SUPABASE_URL:           "https://alyqcfxwjsqlexuzfqqj.supabase.co"
+        SUPABASE_ANON_KEY:      $SUPABASE_ANON_KEY
+        OPENAI_API_KEY:         $OPENAI_API_KEY
+        STRIPE_PUBLISHABLE_KEY: $STRIPE_PUBLISHABLE_KEY
+        APP_SECRET_KEY:         $APP_SECRET_KEY
+        ENCRYPTION_KEY:         $ENCRYPTION_KEY
+        PASSWORD_RESET_URL:     "https://collabfuture.com/reset-password"
+        COLLEGE_SCORECARD_KEY:  $COLLEGE_SCORECARD_KEY
+        CAREERONESTOP_USERID:   $CAREERONESTOP_USERID
+        CAREERONESTOP_TOKEN:    $CAREERONESTOP_TOKEN
+        NETLIFY_AUTH_TOKEN:     $NETLIFY_AUTH_TOKEN   # set in Codemagic UI
+        NETLIFY_SITE_ID:        $NETLIFY_SITE_ID      # set in Codemagic UI
+
+    scripts:
+      - name: Enable Flutter web
+        script: flutter config --enable-web
+
+      - name: Get packages
+        script: flutter pub get
+
+      - name: Build Flutter web
+        script: |
+          flutter build web --release \
+            --dart-define=SUPABASE_URL=$SUPABASE_URL \
+            --dart-define=SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY \
+            --dart-define=OPENAI_API_KEY=$OPENAI_API_KEY \
+            --dart-define=STRIPE_PUBLISHABLE_KEY=$STRIPE_PUBLISHABLE_KEY \
+            --dart-define=APP_SECRET_KEY=$APP_SECRET_KEY \
+            --dart-define=ENCRYPTION_KEY=$ENCRYPTION_KEY \
+            --dart-define=PASSWORD_RESET_URL=$PASSWORD_RESET_URL \
+            --dart-define=COLLEGE_SCORECARD_KEY=$COLLEGE_SCORECARD_KEY \
+            --dart-define=CAREERONESTOP_USERID=$CAREERONESTOP_USERID \
+            --dart-define=CAREERONESTOP_TOKEN=$CAREERONESTOP_TOKEN \
+            --web-renderer canvaskit
+
+      - name: Deploy to Netlify
+        script: |
+          # Install Netlify CLI
+          npm install -g netlify-cli
+
+          # Deploy and capture the URL
+          DEPLOY_URL=$(netlify deploy \
+            --dir=build/web \
+            --auth=$NETLIFY_AUTH_TOKEN \
+            --site=$NETLIFY_SITE_ID \
+            --prod \
+            --json | python3 -c "import sys,json; print(json.load(sys.stdin)['url'])")
+
+          echo "✅ Deployed to: $DEPLOY_URL"
+          echo "DEPLOY_URL=$DEPLOY_URL" >> $CM_ENV
+
+    artifacts:
+      - build/web.zip
+
+    publishing:
+      email:
+        recipients:
+          - patrickjenkins3@github.com   # update to your real email
+        notify:
+          success: true
+          failure: true
+
   # ── Android Preview APK (no signing required) ──────────────
   android-preview:
     name: Android Preview APK
@@ -10,11 +81,11 @@ workflows:
       flutter: stable
       vars:
         SUPABASE_URL:           "https://alyqcfxwjsqlexuzfqqj.supabase.co"
-        SUPABASE_ANON_KEY:      $SUPABASE_ANON_KEY       # set in Codemagic UI
-        OPENAI_API_KEY:         $OPENAI_API_KEY           # set in Codemagic UI
-        STRIPE_PUBLISHABLE_KEY: $STRIPE_PUBLISHABLE_KEY   # set in Codemagic UI
-        APP_SECRET_KEY:         $APP_SECRET_KEY           # set in Codemagic UI
-        ENCRYPTION_KEY:         $ENCRYPTION_KEY           # set in Codemagic UI
+        SUPABASE_ANON_KEY:      $SUPABASE_ANON_KEY
+        OPENAI_API_KEY:         $OPENAI_API_KEY
+        STRIPE_PUBLISHABLE_KEY: $STRIPE_PUBLISHABLE_KEY
+        APP_SECRET_KEY:         $APP_SECRET_KEY
+        ENCRYPTION_KEY:         $ENCRYPTION_KEY
         PASSWORD_RESET_URL:     "https://collabfuture.com/reset-password"
         COLLEGE_SCORECARD_KEY:  $COLLEGE_SCORECARD_KEY
         CAREERONESTOP_USERID:   $CAREERONESTOP_USERID
@@ -24,7 +95,7 @@ workflows:
       - name: Get Flutter packages
         script: flutter pub get
 
-      - name: Build debug APK (no signing needed for preview)
+      - name: Build debug APK
         script: |
           flutter build apk --debug \
             --dart-define=SUPABASE_URL=$SUPABASE_URL \
@@ -44,7 +115,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - patrickjenkins3@github.com   # update to your real email
+          - patrickjenkins3@github.com
         notify:
           success: true
           failure: true
@@ -58,7 +129,7 @@ workflows:
     environment:
       flutter: stable
       ios_signing:
-        distribution_type: development   # use ad_hoc for wider distribution
+        distribution_type: development
         bundle_identifier: com.nextmatric.app
       vars:
         SUPABASE_URL:           "https://alyqcfxwjsqlexuzfqqj.supabase.co"

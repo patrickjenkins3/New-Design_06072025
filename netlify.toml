@@ -1,0 +1,8 @@
+[build]
+  publish = "build/web"
+  command = "echo 'Built by Codemagic'"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
