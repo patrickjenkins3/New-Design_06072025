@@ -3,7 +3,7 @@ name: Build & Deploy Flutter Web
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:   # allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.32.0'
           channel: 'stable'
           cache: true
 
@@ -27,16 +27,23 @@ jobs:
         run: flutter pub get
 
       - name: Build Flutter web
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+          APP_SECRET_KEY: ${{ secrets.APP_SECRET_KEY }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
         run: |
           flutter build web --release \
             --web-renderer canvaskit \
             --base-href /New-Design_06072025/ \
-            --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
-            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }} \
-            --dart-define=OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
-            --dart-define=STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }} \
-            --dart-define=APP_SECRET_KEY=${{ secrets.APP_SECRET_KEY }} \
-            --dart-define=ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }} \
+            --dart-define=SUPABASE_URL=$SUPABASE_URL \
+            --dart-define=SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY \
+            --dart-define=OPENAI_API_KEY=$OPENAI_API_KEY \
+            --dart-define=STRIPE_PUBLISHABLE_KEY=$STRIPE_PUBLISHABLE_KEY \
+            --dart-define=APP_SECRET_KEY=$APP_SECRET_KEY \
+            --dart-define=ENCRYPTION_KEY=$ENCRYPTION_KEY \
             --dart-define=PASSWORD_RESET_URL=https://collabfuture.com/reset-password
 
       - name: Deploy to GitHub Pages
@@ -45,4 +52,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
           force_orphan: true
-          commit_message: "Deploy web build ${{ github.sha }}"
+          commit_message: "Deploy ${{ github.sha }}"
