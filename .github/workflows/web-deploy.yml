@@ -20,17 +20,11 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Enable Flutter web and check
-        run: |
-          flutter config --enable-web
-          flutter --version
-          flutter doctor -v
+      - name: Enable Flutter web
+        run: flutter config --enable-web
 
       - name: Get dependencies
         run: flutter pub get
-
-      - name: Check web support
-        run: flutter build web --help | head -20
 
       - name: Build Flutter web
         shell: bash
@@ -42,10 +36,8 @@ jobs:
           APP_SECRET_KEY: ${{ secrets.APP_SECRET_KEY }}
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
         run: |
-          set -x
           flutter build web \
             --release \
-            --web-renderer canvaskit \
             --base-href "/New-Design_06072025/" \
             --dart-define="SUPABASE_URL=${SUPABASE_URL}" \
             --dart-define="SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}" \
