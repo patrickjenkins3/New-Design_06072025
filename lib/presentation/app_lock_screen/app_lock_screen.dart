@@ -109,7 +109,7 @@ class _AppLockScreenState extends State<AppLockScreen>
 
       // Simulate successful biometric authentication
       await _securityService.resetFailedAttempts();
-      await _securityService.recordActivity();
+      await _securityService.logSecurityEvent(eventType: "activity", eventDescription: "User activity recorded");
 
       if (mounted) {
         Navigator.of(context).pushReplacementNamed('/dashboard-screen');
@@ -131,7 +131,7 @@ class _AppLockScreenState extends State<AppLockScreen>
 
       if (isValid) {
         await _securityService.resetFailedAttempts();
-        await _securityService.recordActivity();
+        await _securityService.logSecurityEvent(eventType: "activity", eventDescription: "User activity recorded");
 
         if (mounted) {
           Navigator.of(context).pushReplacementNamed('/dashboard-screen');

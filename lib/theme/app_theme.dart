@@ -86,7 +86,7 @@ class AppTheme {
       iconTheme:        const IconThemeData(color: navy),
       surfaceTintColor: Colors.transparent,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color:     surfaceCard,
       elevation: 0,
       shape:     RoundedRectangleBorder(
@@ -195,7 +195,7 @@ class AppTheme {
       iconTheme:        const IconThemeData(color: white),
       surfaceTintColor: Colors.transparent,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color:     cardDark,
       elevation: 0,
       shape:     RoundedRectangleBorder(
@@ -270,4 +270,22 @@ class AppTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(color: skyBlue, linearTrackColor: dividerDark),
     sliderTheme: SliderThemeData(activeTrackColor: skyBlue, thumbColor: skyBlue, inactiveTrackColor: dividerDark),
   );
+  // ── Legacy token aliases (backward compat with older screens) ──
+  static const Color primaryLight       = skyBlue;
+  static const Color primaryDark        = skyBlueDim;
+  static const Color backgroundLight    = surface;
+  static const Color backgroundDark     = surfaceDark;
+  static const Color textPrimaryLight   = navy;
+  static const Color textPrimaryDark    = white;
+  static const Color textSecondaryLight = textMuted;
+  static const Color textSecondaryDark  = textMutedDark;
+  static const Color borderLight        = dividerLight;
+  static const Color borderDark         = dividerDark;
+  static const Color successLight       = sage;
+  static const Color successDark        = sageDark;
+  static const Color warningLight       = gold;
+  static const Color warningDark        = goldDark;
+  static const Color accentLight        = skyBlue;
+  static const Color accentDark         = skyBlueDim;
+
 }

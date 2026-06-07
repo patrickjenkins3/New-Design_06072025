@@ -588,18 +588,19 @@ class SecurityService {
     if (_currentUserId == null) return [];
 
     try {
-      var query = _client
+      // Build query with optional eventType filter
+      var builder = _client
           .from('security_audit_log')
           .select()
-          .eq('user_id', _currentUserId!)
-          .order('created_at', ascending: false)
-          .limit(limit);
+          .eq('user_id', _currentUserId!);
 
       if (eventType != null) {
-        query = query.eq('event_type', eventType);
+        builder = builder.eq('event_type', eventType);
       }
 
-      final response = await query;
+      final response = await builder
+          .order('created_at', ascending: false)
+          .limit(limit);
       return List<Map<String, dynamic>>.from(response);
     } catch (error) {
       return [];

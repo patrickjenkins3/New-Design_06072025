@@ -533,7 +533,7 @@ class _AboutUsScreenState extends State<AboutUsScreen>
             child: ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(
-                    context, AppRoutes.familyRegistrationScreen);
+                    context, AppRoutes.progressiveRegistrationScreen);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,

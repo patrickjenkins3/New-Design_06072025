@@ -7,7 +7,7 @@ workflows:
     instance_type: mac_mini_m2
 
     environment:
-      flutter: 3.27.0
+      flutter: stable
       vars:
         SUPABASE_URL:           "https://alyqcfxwjsqlexuzfqqj.supabase.co"
         SUPABASE_ANON_KEY:      $SUPABASE_ANON_KEY       # set in Codemagic UI
@@ -56,7 +56,7 @@ workflows:
     instance_type: mac_mini_m2
 
     environment:
-      flutter: 3.27.0
+      flutter: stable
       ios_signing:
         distribution_type: development   # use ad_hoc for wider distribution
         bundle_identifier: com.nextmatric.app
