@@ -29,7 +29,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     final email = AuthService.instance.currentUser?.email ?? 'alex@email.com';
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.primaryBlack : AppTheme.grey50,
+      backgroundColor: isDark ? AppTheme.navy : AppTheme.surface,
       body: SafeArea(
         child: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -37,29 +37,29 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
               SliverAppBar(
                 title: const Text('Profile Settings'),
                 floating: true,
-                backgroundColor: isDark ? AppTheme.surfaceBlack : AppTheme.white,
+                backgroundColor: isDark ? AppTheme.navyDark : AppTheme.white,
                 elevation: 0,
                 surfaceTintColor: Colors.transparent,
                 bottom: PreferredSize(preferredSize: const Size.fromHeight(1),
-                  child: Divider(height: 1, color: isDark ? AppTheme.dividerBlack : AppTheme.grey100)),
+                  child: Divider(height: 1, color: isDark ? AppTheme.dividerDark : AppTheme.dividerLight)),
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(20),
                 sliver: SliverList(delegate: SliverChildListDelegate([
                   // Avatar
                   Center(child: Stack(children: [
-                    CircleAvatar(radius: 40, backgroundColor: AppTheme.primaryBlack,
+                    CircleAvatar(radius: 40, backgroundColor: AppTheme.navy,
                       child: Text(name.isNotEmpty ? name[0] : 'A',
                         style: const TextStyle(fontSize: 32, color: AppTheme.white, fontWeight: FontWeight.w700))),
                     Positioned(right: 0, bottom: 0,
                       child: Container(width: 28, height: 28,
-                        decoration: BoxDecoration(color: AppTheme.teal, shape: BoxShape.circle, border: Border.all(color: AppTheme.white, width: 2)),
+                        decoration: BoxDecoration(color: AppTheme.skyBlue, shape: BoxShape.circle, border: Border.all(color: AppTheme.white, width: 2)),
                         child: const Icon(Icons.edit, size: 14, color: AppTheme.white))),
                   ])),
                   const SizedBox(height: 16),
                   Center(child: Text(name, style: Theme.of(context).textTheme.headlineSmall)),
                   const SizedBox(height: 4),
-                  Center(child: Text(email, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey500))),
+                  Center(child: Text(email, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textMuted))),
                   const SizedBox(height: 28),
 
                   _SectionLabel('PROFILE'),
@@ -97,7 +97,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Center(child: Text('CollegePath v1.0.0', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.grey300))),
+                  Center(child: Text('CollegePath v1.0.0', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.textMuted))),
                   const SizedBox(height: 80),
                 ])),
               ),
@@ -140,7 +140,7 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(bottom: 8, top: 4),
-    child: Text(label, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.grey500, letterSpacing: 1.2)),
+    child: Text(label, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.textMuted, letterSpacing: 1.2)),
   );
 }
 
@@ -152,13 +152,13 @@ class _SettingsTile extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.only(bottom: 2),
-      decoration: BoxDecoration(color: isDark ? AppTheme.cardBlack : AppTheme.white),
+      decoration: BoxDecoration(color: isDark ? AppTheme.cardDark : AppTheme.white),
       child: ListTile(
-        leading: Container(width: 36, height: 36, decoration: BoxDecoration(color: isDark ? AppTheme.dividerBlack : AppTheme.grey100, borderRadius: BorderRadius.circular(8)),
-          child: Icon(icon, size: 18, color: isDark ? AppTheme.grey300 : AppTheme.grey700)),
+        leading: Container(width: 36, height: 36, decoration: BoxDecoration(color: isDark ? AppTheme.dividerDark : AppTheme.dividerLight, borderRadius: BorderRadius.circular(8)),
+          child: Icon(icon, size: 18, color: isDark ? AppTheme.textMuted : AppTheme.navy)),
         title: Text(title, style: Theme.of(context).textTheme.titleSmall),
-        subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey500)),
-        trailing: const Icon(Icons.chevron_right, color: AppTheme.grey300),
+        subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textMuted)),
+        trailing: const Icon(Icons.chevron_right, color: AppTheme.textMuted),
         onTap: onTap,
       ),
     );

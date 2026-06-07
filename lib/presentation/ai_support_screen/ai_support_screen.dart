@@ -50,30 +50,30 @@ class _AISupportScreenState extends State<AISupportScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.primaryBlack : AppTheme.grey50,
+      backgroundColor: isDark ? AppTheme.navy : AppTheme.surface,
       appBar: AppBar(
-        backgroundColor: isDark ? AppTheme.surfaceBlack : AppTheme.white,
+        backgroundColor: isDark ? AppTheme.navyDark : AppTheme.white,
         surfaceTintColor: Colors.transparent,
         title: Row(children: [
-          Container(width: 32, height: 32, decoration: BoxDecoration(color: AppTheme.teal, borderRadius: BorderRadius.circular(8)),
+          Container(width: 32, height: 32, decoration: BoxDecoration(color: AppTheme.skyBlue, borderRadius: BorderRadius.circular(8)),
             child: const Icon(Icons.smart_toy_outlined, color: AppTheme.white, size: 16)),
           const SizedBox(width: 10),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const Text('AI Support', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-            Text("Here to help you succeed", style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.grey500)),
+            Text("Here to help you succeed", style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.textMuted)),
           ]),
         ]),
         actions: [
           IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
         ],
         bottom: PreferredSize(preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: isDark ? AppTheme.dividerBlack : AppTheme.grey100)),
+          child: Divider(height: 1, color: isDark ? AppTheme.dividerDark : AppTheme.dividerLight)),
       ),
       body: Column(children: [
         // Quick actions
         Container(
           height: 44,
-          color: isDark ? AppTheme.surfaceBlack : AppTheme.white,
+          color: isDark ? AppTheme.navyDark : AppTheme.white,
           child: ListView.separated(
             scrollDirection: Axis.horizontal, padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             itemCount: _quickActions.length, separatorBuilder: (_, __) => const SizedBox(width: 8),
@@ -82,9 +82,9 @@ class _AISupportScreenState extends State<AISupportScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: isDark ? AppTheme.cardBlack : AppTheme.grey100,
+                  color: isDark ? AppTheme.cardDark : AppTheme.dividerLight,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: isDark ? AppTheme.dividerBlack : AppTheme.grey300),
+                  border: Border.all(color: isDark ? AppTheme.dividerDark : AppTheme.textMuted),
                 ),
                 alignment: Alignment.center,
                 child: Text(_quickActions[i], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
@@ -107,7 +107,7 @@ class _AISupportScreenState extends State<AISupportScreen> {
 
         // Input bar
         Container(
-          color: isDark ? AppTheme.surfaceBlack : AppTheme.white,
+          color: isDark ? AppTheme.navyDark : AppTheme.white,
           padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: MediaQuery.of(context).viewInsets.bottom + 8),
           child: Row(children: [
             Expanded(
@@ -115,8 +115,8 @@ class _AISupportScreenState extends State<AISupportScreen> {
                 controller: _msgCtrl,
                 decoration: InputDecoration(
                   hintText: 'Type your message...',
-                  hintStyle: const TextStyle(color: AppTheme.grey500),
-                  filled: true, fillColor: isDark ? AppTheme.cardBlack : AppTheme.grey100,
+                  hintStyle: const TextStyle(color: AppTheme.textMuted),
+                  filled: true, fillColor: isDark ? AppTheme.cardDark : AppTheme.dividerLight,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: BorderSide.none),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
@@ -130,7 +130,7 @@ class _AISupportScreenState extends State<AISupportScreen> {
               onTap: _send,
               child: Container(
                 width: 44, height: 44,
-                decoration: BoxDecoration(color: AppTheme.primaryBlack, shape: BoxShape.circle),
+                decoration: BoxDecoration(color: AppTheme.navy, shape: BoxShape.circle),
                 child: const Icon(Icons.send, color: AppTheme.white, size: 18),
               ),
             ),
@@ -167,22 +167,22 @@ class _MsgBubble extends StatelessWidget {
         children: [
           if (!isUser) ...[
             Container(width: 28, height: 28, margin: const EdgeInsets.only(right: 8),
-              decoration: BoxDecoration(color: AppTheme.teal, borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(color: AppTheme.skyBlue, borderRadius: BorderRadius.circular(8)),
               child: const Icon(Icons.smart_toy_outlined, color: AppTheme.white, size: 14)),
           ],
           Flexible(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
-                color: isUser ? AppTheme.primaryBlack : (isDark ? AppTheme.cardBlack : AppTheme.white),
+                color: isUser ? AppTheme.navy : (isDark ? AppTheme.cardDark : AppTheme.white),
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16), topRight: const Radius.circular(16),
                   bottomLeft: Radius.circular(isUser ? 16 : 4), bottomRight: Radius.circular(isUser ? 4 : 16),
                 ),
-                border: isUser ? null : Border.all(color: isDark ? AppTheme.dividerBlack : AppTheme.grey100),
+                border: isUser ? null : Border.all(color: isDark ? AppTheme.dividerDark : AppTheme.dividerLight),
               ),
               child: Text(msg.text, style: TextStyle(
-                color: isUser ? AppTheme.white : (isDark ? AppTheme.white : AppTheme.primaryBlack),
+                color: isUser ? AppTheme.white : (isDark ? AppTheme.white : AppTheme.navy),
                 fontSize: 14, height: 1.5,
               )),
             ),
@@ -202,14 +202,14 @@ class _TypingIndicator extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(children: [
         Container(width: 28, height: 28, margin: const EdgeInsets.only(right: 8),
-          decoration: BoxDecoration(color: AppTheme.teal, borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(color: AppTheme.skyBlue, borderRadius: BorderRadius.circular(8)),
           child: const Icon(Icons.smart_toy_outlined, color: AppTheme.white, size: 14)),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
-            color: isDark ? AppTheme.cardBlack : AppTheme.white,
+            color: isDark ? AppTheme.cardDark : AppTheme.white,
             borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16), bottomRight: Radius.circular(16)),
-            border: Border.all(color: isDark ? AppTheme.dividerBlack : AppTheme.grey100),
+            border: Border.all(color: isDark ? AppTheme.dividerDark : AppTheme.dividerLight),
           ),
           child: const SizedBox(width: 40, height: 16, child: _Dots()),
         ),
@@ -236,7 +236,7 @@ class _DotsState extends State<_Dots> with SingleTickerProviderStateMixin {
     builder: (_, __) => Row(mainAxisAlignment: MainAxisAlignment.center, children: List.generate(3, (i) {
       final v = (_c.value * 3 - i).clamp(0.0, 1.0);
       return Container(margin: const EdgeInsets.symmetric(horizontal: 2), width: 6, height: 6,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: AppTheme.grey300.withValues(alpha: 0.4 + 0.6 * v)));
+        decoration: BoxDecoration(shape: BoxShape.circle, color: AppTheme.textMuted.withValues(alpha: 0.4 + 0.6 * v)));
     })),
   );
 }

@@ -24,12 +24,12 @@ class _ScholarshipFeedScreenState extends State<ScholarshipFeedScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.primaryBlack : AppTheme.grey50,
+      backgroundColor: isDark ? AppTheme.navy : AppTheme.surface,
       body: SafeArea(
         child: Column(children: [
           // Header
           Container(
-            color: isDark ? AppTheme.surfaceBlack : AppTheme.white,
+            color: isDark ? AppTheme.navyDark : AppTheme.white,
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
             child: Column(children: [
               Row(children: [
@@ -37,7 +37,7 @@ class _ScholarshipFeedScreenState extends State<ScholarshipFeedScreen> {
                 const SizedBox(width: 4),
                 Text('Scholarships', style: Theme.of(context).textTheme.headlineSmall),
                 const Spacer(),
-                Text('${_all.length} scholarships', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey500)),
+                Text('${_all.length} scholarships', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textMuted)),
               ]),
               const SizedBox(height: 12),
               Row(children: [
@@ -46,10 +46,10 @@ class _ScholarshipFeedScreenState extends State<ScholarshipFeedScreen> {
                     controller: _searchCtrl,
                     decoration: InputDecoration(
                       hintText: 'Search scholarships...',
-                      prefixIcon: const Icon(Icons.search, size: 18, color: AppTheme.grey500),
+                      prefixIcon: const Icon(Icons.search, size: 18, color: AppTheme.textMuted),
                       contentPadding: const EdgeInsets.symmetric(vertical: 10),
                       filled: true,
-                      fillColor: isDark ? AppTheme.cardBlack : AppTheme.grey100,
+                      fillColor: isDark ? AppTheme.cardDark : AppTheme.dividerLight,
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
                     ),
                   ),
@@ -58,7 +58,7 @@ class _ScholarshipFeedScreenState extends State<ScholarshipFeedScreen> {
                 GestureDetector(
                   onTap: () => _showFilters(),
                   child: Container(width: 44, height: 44,
-                    decoration: BoxDecoration(color: isDark ? AppTheme.cardBlack : AppTheme.grey100, borderRadius: BorderRadius.circular(10)),
+                    decoration: BoxDecoration(color: isDark ? AppTheme.cardDark : AppTheme.dividerLight, borderRadius: BorderRadius.circular(10)),
                     child: const Icon(Icons.tune, size: 20)),
                 ),
               ]),
@@ -67,16 +67,16 @@ class _ScholarshipFeedScreenState extends State<ScholarshipFeedScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: AppTheme.teal.withValues(alpha: 0.1),
+                  color: AppTheme.skyBlue.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppTheme.teal.withValues(alpha: 0.3)),
+                  border: Border.all(color: AppTheme.skyBlue.withValues(alpha: 0.3)),
                 ),
                 child: Row(children: [
-                  const Icon(Icons.calendar_today, size: 14, color: AppTheme.teal),
+                  const Icon(Icons.calendar_today, size: 14, color: AppTheme.skyBlue),
                   const SizedBox(width: 6),
-                  Text('Due: March 31, 2026 (130 days left)', style: const TextStyle(color: AppTheme.teal, fontSize: 12, fontWeight: FontWeight.w500)),
+                  Text('Due: March 31, 2026 (130 days left)', style: const TextStyle(color: AppTheme.skyBlue, fontSize: 12, fontWeight: FontWeight.w500)),
                   const Spacer(),
-                  const Icon(Icons.close, size: 14, color: AppTheme.teal),
+                  const Icon(Icons.close, size: 14, color: AppTheme.skyBlue),
                 ]),
               ),
             ]),
@@ -129,9 +129,9 @@ class _ScholarshipCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? AppTheme.cardBlack : AppTheme.white,
+        color: isDark ? AppTheme.cardDark : AppTheme.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: isDark ? AppTheme.dividerBlack : AppTheme.grey100),
+        border: Border.all(color: isDark ? AppTheme.dividerDark : AppTheme.dividerLight),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
@@ -139,16 +139,16 @@ class _ScholarshipCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: data.expired ? AppTheme.grey100 : AppTheme.teal.withValues(alpha: 0.1),
+              color: data.expired ? AppTheme.dividerLight : AppTheme.skyBlue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: data.expired ? AppTheme.grey300 : AppTheme.teal.withValues(alpha: 0.3)),
+              border: Border.all(color: data.expired ? AppTheme.textMuted : AppTheme.skyBlue.withValues(alpha: 0.3)),
             ),
             child: Text(data.expired ? 'Expired' : 'Profile Match',
-              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: data.expired ? AppTheme.grey500 : AppTheme.teal)),
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: data.expired ? AppTheme.textMuted : AppTheme.skyBlue)),
           ),
         ]),
         const SizedBox(height: 4),
-        Text(data.org, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey500)),
+        Text(data.org, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textMuted)),
         const SizedBox(height: 10),
         // Description area
         Text(
@@ -159,7 +159,7 @@ class _ScholarshipCard extends StatelessWidget {
         const SizedBox(height: 10),
         Wrap(spacing: 6, runSpacing: 4, children: data.tags.map((t) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-          decoration: BoxDecoration(color: isDark ? AppTheme.dividerBlack : AppTheme.grey100, borderRadius: BorderRadius.circular(4)),
+          decoration: BoxDecoration(color: isDark ? AppTheme.dividerDark : AppTheme.dividerLight, borderRadius: BorderRadius.circular(4)),
           child: Text(t, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500)),
         )).toList()),
         const SizedBox(height: 12),
@@ -168,12 +168,12 @@ class _ScholarshipCard extends StatelessWidget {
         Row(children: [
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text('\$${data.amount.toString()}', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-            Text('Award', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.grey500)),
+            Text('Award', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.textMuted)),
           ]),
           const SizedBox(width: 20),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(data.match.toString() + '%', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700, color: AppTheme.teal)),
-            Text('Profile Match', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.grey500)),
+            Text(data.match.toString() + '%', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700, color: AppTheme.skyBlue)),
+            Text('Profile Match', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.textMuted)),
           ]),
           const Spacer(),
           if (!data.expired && !data.applied) ...[
@@ -192,8 +192,8 @@ class _ScholarshipCard extends StatelessWidget {
           if (data.applied)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              decoration: BoxDecoration(color: AppTheme.successGreen.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
-              child: const Text('Applied ✓', style: TextStyle(color: AppTheme.successGreen, fontSize: 12, fontWeight: FontWeight.w600)),
+              decoration: BoxDecoration(color: AppTheme.sage.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+              child: const Text('Applied ✓', style: TextStyle(color: AppTheme.sage, fontSize: 12, fontWeight: FontWeight.w600)),
             ),
         ]),
       ]),
@@ -229,12 +229,12 @@ class _ScholarshipFiltersSheetState extends State<_ScholarshipFiltersSheet> {
           const Divider(),
           Expanded(child: ListView(controller: ctrl, children: [
             _FilterSection(title: 'AWARD RANGE', child: Column(children: [
-              RangeSlider(values: _award, min: 0, max: 40000, activeColor: AppTheme.teal,
+              RangeSlider(values: _award, min: 0, max: 40000, activeColor: AppTheme.skyBlue,
                 labels: RangeLabels('\$${(_award.start / 1000).round()}k', '\$${(_award.end / 1000).round()}k'),
                 onChanged: (v) => setState(() => _award = v)),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('\$${(_award.start / 1000).round()}k', style: const TextStyle(fontSize: 12, color: AppTheme.grey500)),
-                Text('\$${(_award.end / 1000).round()}k', style: const TextStyle(fontSize: 12, color: AppTheme.grey500)),
+                Text('\$${(_award.start / 1000).round()}k', style: const TextStyle(fontSize: 12, color: AppTheme.textMuted)),
+                Text('\$${(_award.end / 1000).round()}k', style: const TextStyle(fontSize: 12, color: AppTheme.textMuted)),
               ]),
             ])),
             _FilterSection(title: 'SCHOOL TYPE', child: Wrap(spacing: 8, children:
@@ -277,7 +277,7 @@ class _FilterSection extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(title, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.grey500, letterSpacing: 1)),
+      Text(title, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.textMuted, letterSpacing: 1)),
       const SizedBox(height: 10),
       child,
     ]),

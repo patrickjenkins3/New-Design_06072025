@@ -41,7 +41,7 @@ class _SchoolSearchScreenState extends State<SchoolSearchScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.primaryBlack : AppTheme.white,
+      backgroundColor: isDark ? AppTheme.navy : AppTheme.white,
       body: SafeArea(
         child: Column(children: [
           // ── Search header ────────────────────────────────────
@@ -54,7 +54,7 @@ class _SchoolSearchScreenState extends State<SchoolSearchScreen> {
                 child: Container(
                   height: 44,
                   decoration: BoxDecoration(
-                    color: isDark ? AppTheme.cardBlack : AppTheme.grey100,
+                    color: isDark ? AppTheme.cardDark : AppTheme.dividerLight,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextField(
@@ -63,7 +63,7 @@ class _SchoolSearchScreenState extends State<SchoolSearchScreen> {
                     autofocus: true,
                     decoration: InputDecoration(
                       hintText: 'Search colleges, trade schools...',
-                      prefixIcon: const Icon(Icons.search, size: 20, color: AppTheme.grey500),
+                      prefixIcon: const Icon(Icons.search, size: 20, color: AppTheme.textMuted),
                       suffixIcon: _searchCtrl.text.isNotEmpty
                         ? IconButton(icon: const Icon(Icons.close, size: 18), onPressed: () { _searchCtrl.clear(); _search(''); })
                         : null,
@@ -84,7 +84,7 @@ class _SchoolSearchScreenState extends State<SchoolSearchScreen> {
                 child: Container(
                   width: 44, height: 44,
                   decoration: BoxDecoration(
-                    color: isDark ? AppTheme.cardBlack : AppTheme.grey100,
+                    color: isDark ? AppTheme.cardDark : AppTheme.dividerLight,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(Icons.tune, size: 20),
@@ -98,14 +98,14 @@ class _SchoolSearchScreenState extends State<SchoolSearchScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Row(children: [
-                Text('${_results.length} schools found', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey500)),
+                Text('${_results.length} schools found', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textMuted)),
                 const Spacer(),
-                Text('Sort by: ', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey500)),
+                Text('Sort by: ', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textMuted)),
                 DropdownButton<String>(
                   value: _sort,
                   underline: const SizedBox(),
                   isDense: true,
-                  style: TextStyle(color: AppTheme.teal, fontSize: 13, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: AppTheme.skyBlue, fontSize: 13, fontWeight: FontWeight.w600),
                   items: _sortOptions.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
                   onChanged: (v) => setState(() => _sort = v!),
                 ),
@@ -128,13 +128,13 @@ class _SchoolSearchScreenState extends State<SchoolSearchScreen> {
 
   Widget _buildRecent() {
     return ListView(padding: const EdgeInsets.symmetric(horizontal: 16), children: [
-      Text('RECENT SEARCHES', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.grey500, letterSpacing: 1)),
+      Text('RECENT SEARCHES', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.textMuted, letterSpacing: 1)),
       const SizedBox(height: 8),
       ..._recentSearches.map((s) => ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: const Icon(Icons.history, color: AppTheme.grey500, size: 18),
+        leading: const Icon(Icons.history, color: AppTheme.textMuted, size: 18),
         title: Text(s, style: Theme.of(context).textTheme.bodyMedium),
-        trailing: IconButton(icon: const Icon(Icons.close, size: 16, color: AppTheme.grey500),
+        trailing: IconButton(icon: const Icon(Icons.close, size: 16, color: AppTheme.textMuted),
           onPressed: () => setState(() => _recentSearches.remove(s))),
         onTap: () { _searchCtrl.text = s; _search(s); },
       )),
@@ -143,14 +143,14 @@ class _SchoolSearchScreenState extends State<SchoolSearchScreen> {
 
   Widget _buildResults() {
     if (_searching) return const Center(child: CircularProgressIndicator());
-    if (_error != null) return Center(child: Text(_error!, style: const TextStyle(color: AppTheme.grey500)));
+    if (_error != null) return Center(child: Text(_error!, style: const TextStyle(color: AppTheme.textMuted)));
     if (_results.isEmpty) return Center(
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        const Icon(Icons.search_off, size: 48, color: AppTheme.grey300),
+        const Icon(Icons.search_off, size: 48, color: AppTheme.textMuted),
         const SizedBox(height: 12),
         Text('No schools found', style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 4),
-        Text('Try adjusting your search', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey500)),
+        Text('Try adjusting your search', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textMuted)),
       ]),
     );
     return ListView.separated(
@@ -182,12 +182,12 @@ class _SchoolResultCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: isDark ? AppTheme.cardBlack : AppTheme.white,
+          color: isDark ? AppTheme.cardDark : AppTheme.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isDark ? AppTheme.dividerBlack : AppTheme.grey100),
+          border: Border.all(color: isDark ? AppTheme.dividerDark : AppTheme.dividerLight),
         ),
         child: Row(children: [
-          CircleAvatar(radius: 22, backgroundColor: AppTheme.primaryBlack,
+          CircleAvatar(radius: 22, backgroundColor: AppTheme.navy,
             child: Text(school.name.isNotEmpty ? school.name[0] : '?',
               style: const TextStyle(color: AppTheme.white, fontWeight: FontWeight.w600))),
           const SizedBox(width: 12),
@@ -195,14 +195,14 @@ class _SchoolResultCard extends StatelessWidget {
             Text(school.name, style: Theme.of(context).textTheme.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
             const SizedBox(height: 2),
             Text('${school.city ?? ''}, ${school.state ?? ''}',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey500)),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textMuted)),
             const SizedBox(height: 6),
             Wrap(spacing: 6, children: [
               _Tag('Private'),
               if (school.inStateTuition != null) _Tag('\$${_fmt(school.inStateTuition!)}'),
             ]),
           ])),
-          const Icon(Icons.chevron_right, color: AppTheme.grey300),
+          const Icon(Icons.chevron_right, color: AppTheme.textMuted),
         ]),
       ),
     );
@@ -217,8 +217,8 @@ class _Tag extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-    decoration: BoxDecoration(color: AppTheme.grey100, borderRadius: BorderRadius.circular(4)),
-    child: Text(label, style: const TextStyle(fontSize: 11, color: AppTheme.grey700)),
+    decoration: BoxDecoration(color: AppTheme.dividerLight, borderRadius: BorderRadius.circular(4)),
+    child: Text(label, style: const TextStyle(fontSize: 11, color: AppTheme.navy)),
   );
 }
 
@@ -270,19 +270,19 @@ class _SchoolFiltersSheetState extends State<_SchoolFiltersSheet> {
             _FilterSection(title: 'TUITION RANGE', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               RangeSlider(
                 values: _tuition, min: 0, max: 80000,
-                activeColor: AppTheme.teal,
+                activeColor: AppTheme.skyBlue,
                 labels: RangeLabels('\$${(_tuition.start / 1000).round()}k', '\$${(_tuition.end / 1000).round()}k'),
                 onChanged: (v) => setState(() => _tuition = v),
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('\$${(_tuition.start / 1000).round()}k', style: const TextStyle(fontSize: 12, color: AppTheme.grey500)),
-                Text('\$${(_tuition.end / 1000).round()}k', style: const TextStyle(fontSize: 12, color: AppTheme.grey500)),
+                Text('\$${(_tuition.start / 1000).round()}k', style: const TextStyle(fontSize: 12, color: AppTheme.textMuted)),
+                Text('\$${(_tuition.end / 1000).round()}k', style: const TextStyle(fontSize: 12, color: AppTheme.textMuted)),
               ]),
             ])),
             _FilterSection(title: 'ACCEPTANCE RATE', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Slider(value: _acceptance, min: 0, max: 100, activeColor: AppTheme.teal,
+              Slider(value: _acceptance, min: 0, max: 100, activeColor: AppTheme.skyBlue,
                 onChanged: (v) => setState(() => _acceptance = v)),
-              Text('Up to ${_acceptance.round()}%', style: const TextStyle(fontSize: 12, color: AppTheme.grey500)),
+              Text('Up to ${_acceptance.round()}%', style: const TextStyle(fontSize: 12, color: AppTheme.textMuted)),
             ])),
             _FilterSection(title: 'ADVANCED FILTERS', child: Wrap(spacing: 8, children: [
               FilterChip(label: const Text('Has Online Programs'), onSelected: (_) {}, selected: false),
@@ -312,7 +312,7 @@ class _FilterSection extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(title, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.grey500, letterSpacing: 1)),
+      Text(title, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppTheme.textMuted, letterSpacing: 1)),
       const SizedBox(height: 10),
       child,
     ]),

@@ -4,7 +4,6 @@ import '../theme/app_theme.dart';
 class CFBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
-
   const CFBottomNav({super.key, required this.currentIndex, required this.onTap});
 
   @override
@@ -12,8 +11,8 @@ class CFBottomNav extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? AppTheme.surfaceBlack : AppTheme.white,
-        border: Border(top: BorderSide(color: isDark ? AppTheme.dividerBlack : AppTheme.grey100)),
+        color: isDark ? AppTheme.navyDark : AppTheme.white,
+        border: Border(top: BorderSide(color: isDark ? AppTheme.dividerDark : AppTheme.dividerLight)),
       ),
       child: SafeArea(
         top: false,
@@ -22,11 +21,13 @@ class CFBottomNav extends StatelessWidget {
           onTap: onTap,
           backgroundColor: Colors.transparent,
           elevation: 0,
+          selectedItemColor:   isDark ? AppTheme.skyBlue : AppTheme.navy,
+          unselectedItemColor: isDark ? AppTheme.textMutedDark : AppTheme.textMuted,
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_today_outlined), activeIcon: Icon(Icons.calendar_today), label: 'Calendar'),
-            BottomNavigationBarItem(icon: Icon(Icons.card_giftcard_outlined), activeIcon: Icon(Icons.card_giftcard), label: 'Scholarships'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline), activeIcon: Icon(Icons.person), label: 'Profile'),
+            BottomNavigationBarItem(icon: Icon(Icons.home_outlined),         activeIcon: Icon(Icons.home),           label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.calendar_today_outlined),activeIcon: Icon(Icons.calendar_today), label: 'Calendar'),
+            BottomNavigationBarItem(icon: Icon(Icons.card_giftcard_outlined), activeIcon: Icon(Icons.card_giftcard),  label: 'Scholarships'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_outline),         activeIcon: Icon(Icons.person),         label: 'Profile'),
           ],
         ),
       ),
