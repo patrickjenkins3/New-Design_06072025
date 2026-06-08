@@ -74,6 +74,7 @@ class SecurityService {
   static const String _backgroundBlurKey = 'background_blur_enabled';
   static const String _twoFactorEnabledKey = 'two_factor_enabled';
   static const String _userPinKey = 'user_pin_secure';
+  static const String _userPinIvKey = 'user_pin_iv_secure';
   static const String _failedAttemptsKey = 'failed_attempts';
   static const String _lastLockTimeKey = 'last_lock_time';
   static const String _pinHashKey = 'pin_hash_secure';
@@ -212,9 +213,12 @@ class SecurityService {
       // Store hashed PIN in secure storage
       await _secureStorage.write(key: _pinHashKey, value: pinHash);
 
-      // Also encrypt original PIN for verification
+      // Also encrypt original PIN for verification. Persist the IV alongside
+      // the ciphertext so it can be reused for decryption (a fresh random IV
+      // is generated on every _initializeEncryption() call).
       final encryptedPin = _encrypter.encrypt(pin, iv: _iv);
       await _secureStorage.write(key: _userPinKey, value: encryptedPin.base64);
+      await _secureStorage.write(key: _userPinIvKey, value: _iv.base64);
 
       await updateSecuritySettings(pinEnabled: true);
     } catch (error) {
@@ -294,8 +298,12 @@ class SecurityService {
       if (storedEncrypted == null) return false;
 
       await _initializeEncryption();
+      // Use the IV that was persisted at encryption time; without it the
+      // randomly generated _iv would never match and decryption would fail.
+      final storedIvString = await _secureStorage.read(key: _userPinIvKey);
+      final iv = storedIvString != null ? IV.fromBase64(storedIvString) : _iv;
       final encrypted = Encrypted.fromBase64(storedEncrypted);
-      final decryptedPin = _encrypter.decrypt(encrypted, iv: _iv);
+      final decryptedPin = _encrypter.decrypt(encrypted, iv: iv);
       return decryptedPin == pin;
     } catch (error) {
       return false;
@@ -305,6 +313,7 @@ class SecurityService {
   Future<void> removePIN() async {
     try {
       await _secureStorage.delete(key: _userPinKey);
+      await _secureStorage.delete(key: _userPinIvKey);
       await _secureStorage.delete(key: _pinHashKey);
       await updateSecuritySettings(pinEnabled: false);
     } catch (error) {

@@ -102,7 +102,8 @@ class CareerOneStopScholarshipModel {
     // Higher priority for larger amounts
     if (amount.toLowerCase().contains('full')) score += 10;
     if (amount.contains('\$')) {
-      final numMatch = RegExp(r'\$(\d{1,3}(?:,\d{3})*)').firstMatch(amount);
+      // Match amounts with or without thousands separators (e.g. $5000 or $5,000).
+      final numMatch = RegExp(r'\$(\d[\d,]*)').firstMatch(amount);
       if (numMatch != null) {
         final amountNum =
             int.tryParse(numMatch.group(1)?.replaceAll(',', '') ?? '0') ?? 0;

@@ -81,8 +81,14 @@ class InputValidator {
       'qwertyuiop', 'asdfghjkl', 'zxcvbnm', '1234567890'
     ];
     
+    // Check for any run of 4+ consecutive keys from a keyboard pattern, not
+    // just the first 4 characters of each pattern.
     for (final pattern in keyboardPatterns) {
-      if (lowercasePassword.contains(pattern.substring(0, 4))) return true;
+      for (int i = 0; i + 4 <= pattern.length; i++) {
+        if (lowercasePassword.contains(pattern.substring(i, i + 4))) {
+          return true;
+        }
+      }
     }
     
     // Repeated characters (3+ in a row)

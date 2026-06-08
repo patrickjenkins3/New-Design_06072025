@@ -40,6 +40,12 @@ class DataExportService {
                 ? scholarship['scholarship_applications'][0]
                 : null;
 
+        // Guard the bookmarks embed: it may be null or empty for a malformed
+        // response even though the !inner join normally guarantees a row.
+        final bookmarks = scholarship['scholarship_bookmarks'];
+        final bookmarkDate =
+            (bookmarks is List && bookmarks.isNotEmpty) ? bookmarks[0]['created_at'] : null;
+
         return {
           'scholarship_name': scholarship['title'] ?? '',
           'sponsor': scholarship['sponsor'] ?? '',
@@ -48,8 +54,7 @@ class DataExportService {
           'deadline': scholarship['deadline'] ?? '',
           'difficulty': scholarship['difficulty'] ?? '',
           'status': application?['status'] ?? 'bookmarked',
-          'application_date': application?['applied_at'] ??
-              scholarship['scholarship_bookmarks'][0]['created_at'],
+          'application_date': application?['applied_at'] ?? bookmarkDate,
           'notes': application?['notes'] ?? '',
           'match_percentage':
               scholarship['match_percentage']?.toString() ?? '0',
@@ -99,15 +104,20 @@ class DataExportService {
       final now = DateTime.now();
       final upcomingDeadlines = applications
           .where((app) {
+            // The scholarships embed is a non-inner join, so it can be null.
+            final scholarship = app['scholarships'];
             final deadline =
-                DateTime.tryParse(app['scholarships']['deadline'] ?? '');
+                DateTime.tryParse(scholarship?['deadline'] ?? '');
             return deadline != null && deadline.isAfter(now);
           })
-          .map((app) => {
-                'scholarship': app['scholarships']['title'],
-                'deadline': app['scholarships']['deadline'],
-                'status': app['status'],
-              })
+          .map((app) {
+            final scholarship = app['scholarships'];
+            return {
+              'scholarship': scholarship?['title'],
+              'deadline': scholarship?['deadline'],
+              'status': app['status'],
+            };
+          })
           .toList();
 
       return {
