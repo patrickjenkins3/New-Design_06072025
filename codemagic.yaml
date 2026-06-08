@@ -41,7 +41,6 @@ workflows:
             --dart-define=COLLEGE_SCORECARD_KEY=$COLLEGE_SCORECARD_KEY \
             --dart-define=CAREERONESTOP_USERID=$CAREERONESTOP_USERID \
             --dart-define=CAREERONESTOP_TOKEN=$CAREERONESTOP_TOKEN \
-            --web-renderer canvaskit \
             --base-href /New-Design_06072025/
 
       - name: Deploy to GitHub Pages
