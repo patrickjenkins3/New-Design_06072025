@@ -132,14 +132,22 @@ class SchoolDataService {
     Map<String, dynamic> filters,
   ) {
     return schools.where((school) {
-      // Apply enrollment size filter
-      if (filters['small'] == true && school['enrollment'] >= 5000)
-        return false;
-      if (filters['medium'] == true &&
-          (school['enrollment'] < 5000 || school['enrollment'] > 15000))
-        return false;
-      if (filters['large'] == true && school['enrollment'] <= 15000)
-        return false;
+      // Apply enrollment size filter. Size bands are independent checkboxes, so
+      // a school should match if it falls in ANY selected band (union), not be
+      // excluded unless it matches every band (which empties multi-selections).
+      final sizeFilterActive = filters['small'] == true ||
+          filters['medium'] == true ||
+          filters['large'] == true;
+      if (sizeFilterActive) {
+        final enrollment = (school['enrollment'] as num?) ?? 0;
+        final matchesSize =
+            (filters['small'] == true && enrollment < 5000) ||
+                (filters['medium'] == true &&
+                    enrollment >= 5000 &&
+                    enrollment <= 15000) ||
+                (filters['large'] == true && enrollment > 15000);
+        if (!matchesSize) return false;
+      }
 
       // Apply other filters
       if (filters['hasOnline'] == true && school['hasOnline'] != true)

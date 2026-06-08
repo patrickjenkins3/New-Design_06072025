@@ -41,16 +41,35 @@ class GdeltNewsModel {
       }
     }
 
+    // GDELT may use different field names for the article excerpt across
+    // its API modes; read from the known text fields and fall back to empty.
+    final snippetText = json['excerpt']?.toString() ??
+        json['snippet']?.toString() ??
+        json['description']?.toString() ??
+        '';
+
+    // GDELT `tone` is a sentiment value (roughly -100..+100) and can arrive as
+    // a String or a num. Parse it safely and normalize to a 0..1 score so it
+    // matches the thresholds used by [relevanceDisplay].
+    final rawTone = _parseDouble(json['tone']);
+    final normalizedRelevance = ((rawTone + 100) / 200).clamp(0.0, 1.0);
+
     return GdeltNewsModel(
       url: json['url']?.toString() ?? '',
       title: json['title']?.toString() ?? '',
-      snippet: json['seendate']?.toString() ??
-          '', // GDELT uses different field names
+      snippet: snippetText,
       source: json['domain']?.toString() ?? '',
       publishedDate: parseDate(json['seendate']?.toString()),
       imageUrl: json['socialimage']?.toString() ?? '',
-      relevanceScore: (json['tone']?.toDouble() ?? 0.0),
+      relevanceScore: normalizedRelevance,
     );
+  }
+
+  /// Safely parses a dynamic JSON value (num, String, or null) into a double.
+  static double _parseDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is num) return value.toDouble();
+    return double.tryParse(value.toString()) ?? 0.0;
   }
 
   Map<String, dynamic> toJson() {

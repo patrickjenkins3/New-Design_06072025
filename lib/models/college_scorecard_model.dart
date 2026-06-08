@@ -38,13 +38,24 @@ class CollegeScoreCardModel {
       name: school['name']?.toString() ?? '',
       state: school['state']?.toString() ?? '',
       city: school['city']?.toString() ?? '',
-      inStateTuition: tuition['in_state'],
-      outOfStateTuition: tuition['out_of_state'],
-      satScoreAverage: satScores['average']?['overall'],
-      actScoreAverage: actScores['midpoint']?['cumulative'],
-      studentSize: student['size'],
+      inStateTuition: _parseInt(tuition['in_state']),
+      outOfStateTuition: _parseInt(tuition['out_of_state']),
+      satScoreAverage: _parseInt(satScores['average']?['overall']),
+      actScoreAverage: _parseInt(actScores['midpoint']?['cumulative']),
+      studentSize: _parseInt(student['size']),
       schoolUrl: school['school_url']?.toString(),
     );
+  }
+
+  /// Safely parses a dynamic JSON value into an int. The College Scorecard API
+  /// frequently returns these fields as doubles (e.g. 12345.0) or strings, so a
+  /// direct cast to int? would throw at runtime.
+  static int? _parseInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is num) return value.round();
+    return int.tryParse(value.toString()) ??
+        double.tryParse(value.toString())?.round();
   }
 
   Map<String, dynamic> toJson() {

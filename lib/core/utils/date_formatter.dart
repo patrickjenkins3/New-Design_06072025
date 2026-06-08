@@ -58,7 +58,11 @@ class DateFormatter {
   /// Gets relative date description with fallback to standard format
   static String getRelativeOrStandardDate(DateTime date) {
     final now = DateTime.now();
-    final difference = date.difference(now).inDays;
+    // Compare calendar days, not elapsed 24h periods, so a date a few hours
+    // away that falls on the next calendar day is correctly "Tomorrow".
+    final today = DateTime(now.year, now.month, now.day);
+    final target = DateTime(date.year, date.month, date.day);
+    final difference = target.difference(today).inDays;
 
     if (difference == 0) return 'Today (${formatDate(date)})';
     if (difference == 1) return 'Tomorrow (${formatDate(date)})';
@@ -76,7 +80,11 @@ class DateFormatter {
   /// Formats deadline with urgency and standard date
   static String formatDeadlineWithDate(DateTime deadline) {
     final now = DateTime.now();
-    final daysLeft = deadline.difference(now).inDays;
+    // Use calendar-day difference so a deadline later today vs. tomorrow is
+    // classified correctly regardless of the current time of day.
+    final today = DateTime(now.year, now.month, now.day);
+    final deadlineDay = DateTime(deadline.year, deadline.month, deadline.day);
+    final daysLeft = deadlineDay.difference(today).inDays;
     final standardDate = formatDate(deadline);
 
     if (daysLeft < 0) return 'Expired ($standardDate)';
