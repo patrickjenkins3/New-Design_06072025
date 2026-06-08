@@ -25,6 +25,9 @@ workflows:
       - name: Enable Flutter web
         script: flutter config --enable-web
 
+      - name: Add web platform to project
+        script: flutter create . --platforms web --project-name collab_future
+
       - name: Get packages
         script: flutter pub get
 
